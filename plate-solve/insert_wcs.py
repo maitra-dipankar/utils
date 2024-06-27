@@ -32,6 +32,8 @@ to see help on usage.
        parity. Giving an input file name is required. Giving RA, DEC, 
        search radius, plate scale bounds, and parity are optional. 
        See help for more details.
+       
+2024-Jun-27 (DM): Distinguishes fit/FIT/fits/FITS correctly.	
 '''
 
 import sys
@@ -75,7 +77,17 @@ myscaleHi = args.hi
 myparity  = args.p
 
 # Create the name of the output file
-opfile = ipfile.replace(".fits", "_wcs.fits")
+if ipfile.find('.fits') != -1:
+    opfile = ipfile.replace(".fits", "_wcs.fits")
+elif ipfile.find('.FITS') != -1:
+    opfile = ipfile.replace(".FITS", "_wcs.FITS")
+elif ipfile.find('.fit') != -1:
+    opfile = ipfile.replace(".fit", "_wcs.fit")
+elif ipfile.find('.FIT') != -1:
+    opfile = ipfile.replace(".FIT", "_wcs.FIT")
+else:
+    print("Input file is not FITS?")
+    sys.exit(1)
 
 
 from astropy.io import fits
